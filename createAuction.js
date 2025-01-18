@@ -15,7 +15,8 @@ export const createAuction = async (event) => {
   }
 
   await dynamoDB.put({
-    TableName: 'AuctionsTable',
+    // Environment variable
+    TableName: process.env.AUCTIONS_TABLE_NAME,
     Item: auction
   }).promise();
 

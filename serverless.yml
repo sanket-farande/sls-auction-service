@@ -5,12 +5,16 @@ app: auction-service
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: auction-service
 
+# Application level
 provider:
   name: aws
   runtime: nodejs20.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  # Environment variables at application level or function level
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iam:
     role:
       statements:
@@ -18,8 +22,10 @@ provider:
 
 resources:
   Resources:
+  # Logical name key AuctionsTable
     AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
+# Function level
 functions:
   createAuction:
     handler: createAuction.createAuction
@@ -27,3 +33,10 @@ functions:
       - http:
           method: POST
           path: /auction
+
+custom:
+  AuctionsTable:
+    # !Ref, !GetAtt Intrinsic functions as per AWS docs
+    # Logical name (AuctionsTable) of resource
+    name: !Ref AuctionsTable    
+    arn: !GetAtt AuctionsTable.Arn
