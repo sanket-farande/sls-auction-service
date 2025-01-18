@@ -1,0 +1,5 @@
+AuctionsTableIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+  Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/AuctionsTable

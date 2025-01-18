@@ -11,20 +11,14 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  iam:
+    role:
+      statements:
+        - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
 
 resources:
   Resources:
-    AuctionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: AuctionsTable
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
 functions:
   createAuction:
