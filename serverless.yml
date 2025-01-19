@@ -34,6 +34,13 @@ functions:
           method: POST
           path: /auction
 
+  getAuctions:
+    handler: getAuctions.handler
+    events:
+      - http:
+          method: GET
+          path: /auctions
+
 custom:
   AuctionsTable:
     # !Ref, !GetAtt Intrinsic functions as per AWS docs

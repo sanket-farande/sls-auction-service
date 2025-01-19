@@ -3,7 +3,6 @@ import AWS from 'aws-sdk';
 import middy from '@middy/core'
 import httpJsonBosyParser from '@middy/http-json-body-parser'
 import httpEventNormalizer from '@middy/http-event-normalizer'
-import httpEventHandler from '@middy/http-error-handler'
 import httpErrorHandler from '@middy/http-error-handler';
 import createError from 'http-errors';
 
