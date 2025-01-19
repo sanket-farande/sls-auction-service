@@ -28,7 +28,7 @@ resources:
 # Function level
 functions:
   createAuction:
-    handler: createAuction.createAuction
+    handler: createAuction.handler
     events:
       - http:
           method: POST
