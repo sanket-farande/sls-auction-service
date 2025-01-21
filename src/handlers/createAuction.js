@@ -13,8 +13,11 @@ const createAuction = async (event) => {
     id: v4(),
     title,
     status: 'OPEN',
-    createdAt: now.toISOString()
-  }
+    createdAt: now.toISOString(),
+    highestBid: {
+      amount: 0
+    }
+  };
 
   try {
     await dynamoDB.put({
