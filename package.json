@@ -10,10 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@middy/core": "^6.0.0",
-    "@middy/http-error-handler": "^6.0.0",
-    "@middy/http-event-normalizer": "^6.0.0",
-    "@middy/http-json-body-parser": "^6.0.0",
+    "auction-service-common": "^1.0.0",
     "aws-sdk": "^2.1692.0",
     "http-errors": "^2.0.0",
     "uuid": "^11.0.5"

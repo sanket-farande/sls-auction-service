@@ -5,6 +5,10 @@ app: auction-service
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: auction-service
 
+package:
+  patterns:
+    - '!common/**'
+
 # Application level
 provider:
   name: aws

@@ -1,9 +1,6 @@
 import { v4 } from 'uuid';
 import AWS from 'aws-sdk';
-import middy from '@middy/core'
-import httpJsonBosyParser from '@middy/http-json-body-parser'
-import httpEventNormalizer from '@middy/http-event-normalizer'
-import httpErrorHandler from '@middy/http-error-handler';
+import { commonMiddlewares } from 'auction-service-common';
 import createError from 'http-errors';
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
@@ -37,10 +34,4 @@ const createAuction = async (event) => {
   };
 };
 
-export const handler = middy(createAuction)
-  // Stringified body obj 
-  .use(httpJsonBosyParser())
-  // Prevents from Cannot read properties of undefined error by adding those objects
-  .use(httpEventNormalizer())
-  // Error Handling
-  .use(httpErrorHandler())
+export const handler = commonMiddlewares(createAuction);
