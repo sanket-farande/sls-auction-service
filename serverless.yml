@@ -9,6 +9,12 @@ package:
   patterns:
     - '!common/**'
 
+plugins:
+  - serverless-bundle
+
+build:
+  esbuild: false
+  
 # Application level
 provider:
   name: aws

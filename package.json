@@ -2,7 +2,6 @@
   "name": "auction-service",
   "version": "1.0.0",
   "description": "Auction service created with serverless Lambdas",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,5 +13,8 @@
     "aws-sdk": "^2.1692.0",
     "http-errors": "^2.0.0",
     "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^6.3.1"
   }
 }
