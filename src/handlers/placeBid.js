@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import createError from 'http-errors';
-import { commonMiddlewares } from 'auction-service-common';
+import { commonMiddlewares, catchBlockCode } from 'auction-service-common';
 import { getAuctionById } from './getAuction';
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
@@ -34,11 +34,7 @@ const placeBid = async (event) => {
     const result = await dynamoDB.update(params).promise();
     updatedAuction = result.Attributes;
   } catch (error) {
-    if (error instanceof createError.HttpError) {
-      throw error;
-    }
-    console.error(error);
-    throw new createError.InternalServerError(error);
+    catchBlockCode(error);
   }
 
   return {

@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import createError from 'http-errors';
-import { commonMiddlewares } from 'auction-service-common';
+import { catchBlockCode, commonMiddlewares } from 'auction-service-common';
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
@@ -16,13 +16,11 @@ const getAuction = async (event) => {
 
     try {
         auction = await getAuctionById(id);
+        if (!auction) {
+            throw new createError.NotFound(`Auction not found with mentioned ID : ${id}`);
+        }
     } catch (error) {
-        console.error(error);
-        throw new createError.InternalServerError(error);
-    }
-
-    if (!auction) {
-        throw new createError.NotFound(`Auction not found with mentioned ID : ${id}`);
+        catchBlockCode(error);
     }
 
     return {

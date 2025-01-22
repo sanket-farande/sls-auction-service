@@ -5,16 +5,18 @@ app: auction-service
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: auction-service
 
+# Exclude
 package:
   patterns:
     - '!common/**'
 
+# Webpack plugin for bundeling
 plugins:
   - serverless-bundle
 
 build:
   esbuild: false
-  
+
 # Application level
 provider:
   name: aws
@@ -69,5 +71,5 @@ custom:
   AuctionsTable:
     # !Ref, !GetAtt Intrinsic functions as per AWS docs
     # Logical name (AuctionsTable) of resource
-    name: !Ref AuctionsTable    
+    name: !Ref AuctionsTable
     arn: !GetAtt AuctionsTable.Arn

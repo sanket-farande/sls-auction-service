@@ -1,7 +1,6 @@
 import { v4 } from 'uuid';
 import AWS from 'aws-sdk';
-import { commonMiddlewares } from 'auction-service-common';
-import createError from 'http-errors';
+import { catchBlockCode, commonMiddlewares } from 'auction-service-common';
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
@@ -26,8 +25,7 @@ const createAuction = async (event) => {
       Item: auction
     }).promise();
   } catch (error) {
-    console.error(error);
-    throw new createError.InternalServerError(error);
+    catchBlockCode(error);
   }
 
   // 201: Resource created
