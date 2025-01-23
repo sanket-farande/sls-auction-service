@@ -5,9 +5,27 @@ AuctionsTable:
     # To make it dynamic and per environment with ease
     TableName: AuctionsTable-${self:provider.stage}
     BillingMode: PAY_PER_REQUEST
+    # All attributes defined here should be used
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
+      - AttributeName: status
+        AttributeType: S
+      - AttributeName: endingAt
+        AttributeType: S
+    # Primary Key
     KeySchema:
       - AttributeName: id
         KeyType: HASH
+    # Secondary indexes
+    GlobalSecondaryIndexes:
+      - IndexName: statusAndEndDate
+        KeySchema:
+        # Partition Key
+          - AttributeName: status
+            KeyType: HASH
+        # Sort Key
+          - AttributeName: endingAt
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
