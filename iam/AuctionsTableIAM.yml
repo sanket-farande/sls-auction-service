@@ -2,9 +2,11 @@
 AuctionsTableIAM:
   Effect: Allow
   Action:
-    - dynamodb:PutItem
-    - dynamodb:Scan
-    - dynamodb:GetItem
-    - dynamodb:UpdateItem
-  Resource: 
-    - ${self:custom.AuctionsTable.arn}
+    - dynamodb:PutItem #Create auction
+    - dynamodb:Scan #Get auctions through whole scans
+    - dynamodb:GetItem #Get aution with id
+    - dynamodb:UpdateItem #Patch item as placing a bid
+    - dynamodb:Query  #Query for closing auctions
+  Resource:
+    - ${self:custom.AuctionsTable.arn}  #Auctions Table
+    - !Join [ '/', ['${self:custom.AuctionsTable.arn}', 'index', 'statusAndEndDate']] #Auctions Table GSI
