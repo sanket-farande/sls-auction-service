@@ -1,5 +1,6 @@
 const schema = {
     type: 'object',
+    required: ['queryStringParameters'],
     properties: {
         queryStringParameters: {
             type: 'object',
@@ -11,10 +12,7 @@ const schema = {
                 }
             }
         }
-    },
-    required: [
-        'queryStringParameters'
-    ]
+    }
 };
 
 export default schema;

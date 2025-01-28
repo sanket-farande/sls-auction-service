@@ -38,6 +38,6 @@ export const handler = commonMiddlewares(getAuctions)
     eventSchema: transpileSchema(getAuctionsSchema),
     ajvOptions: {
       useDefaults: true,
-      strict: false,
-    },
+      strict: false
+    }
   }));
