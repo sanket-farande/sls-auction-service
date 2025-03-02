@@ -45,6 +45,7 @@ functions:
       - http:
           method: POST
           path: /auction
+          authorizer: auth
 
   getAuctions:
     handler: src/handlers/getAuctions.handler
@@ -52,6 +53,7 @@ functions:
       - http:
           method: GET
           path: /auctions
+          authorizer: auth
 
   getAuction:
     handler: src/handlers/getAuction.handler
@@ -59,6 +61,7 @@ functions:
       - http:
           method: GET
           path: /auction/{id}
+          authorizer: auth
 
   placeBid:
     handler: src/handlers/placeBid.handler
@@ -66,11 +69,18 @@ functions:
       - http:
           method: PATCH
           path: /auction/{id}/bid
+          authorizer: auth
 
   processAuctions:
     handler: src/handlers/processAuctions.handler
     # events:
     #   - schedule : rate(1 minute)
+
+# It should be seperate service all together so can be used across various applications
+  auth:
+    handler: src/handlers/auth.handler
+    environment:
+      AUTH0_PUBLIC_KEY: ${file(secret.pem)}
 
 custom:
   AuctionsTable:

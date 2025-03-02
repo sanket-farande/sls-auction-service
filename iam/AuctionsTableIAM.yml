@@ -9,4 +9,4 @@ AuctionsTableIAM:
     - dynamodb:Query  #Query for closing auctions
   Resource:
     - ${self:custom.AuctionsTable.arn}  #Auctions Table
-    - !Join [ '/', ['${self:custom.AuctionsTable.arn}', 'index', 'statusAndEndDate']] #Auctions Table GSI
+    - !Join [ '/', ['${self:custom.AuctionsTable.arn}', 'index', 'statusAndEndDate']] #Auctions Table Global Secondary Index
