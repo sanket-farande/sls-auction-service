@@ -15,9 +15,13 @@ export const commonMiddlewares = (handler) => middy(handler)
   ]);
 
 export const catchBlockCode = (error) => {
+  let errmsg = error;
   if (error instanceof createError.HttpError) {
     throw error;
   }
-  console.error(error);
-  throw new createError.InternalServerError(error);
+  if (typeof error === 'object') {
+    errmsg = error.message;
+  }
+  console.error(`Error in catch block : `, error, errmsg);
+  throw new createError.InternalServerError(errmsg);
 }

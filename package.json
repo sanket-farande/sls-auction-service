@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@middy/validator": "^6.0.0",
-    "auction-service-common": "^1.0.1",
+    "auction-service-common": "^1.0.7",
     "aws-sdk": "^2.1692.0",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
