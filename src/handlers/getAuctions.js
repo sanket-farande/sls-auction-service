@@ -8,19 +8,20 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const getAuctions = async (event) => {
   let auctions;
-  let { status } = event.queryStringParameters;
-  let params = {
-    TableName: process.env.AUCTIONS_TABLE_NAME,
-    KeyConditionExpression: '#status = :status',
-    IndexName: 'statusAndEndDate',
-    ExpressionAttributeValues: {
-      ':status': status
-    },
-    ExpressionAttributeNames: {
-      '#status': 'status'
-    }
-  };
+
   try {
+    let { status } = event.queryStringParameters;
+    let params = {
+      TableName: process.env.AUCTIONS_TABLE_NAME,
+      KeyConditionExpression: '#status = :status',
+      IndexName: 'statusAndEndDate',
+      ExpressionAttributeValues: {
+        ':status': status
+      },
+      ExpressionAttributeNames: {
+        '#status': 'status'
+      }
+    };
     const result = await dynamoDB.query(params).promise();
     auctions = result.Items;
   } catch (error) {

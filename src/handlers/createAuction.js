@@ -8,25 +8,25 @@ import { transpileSchema } from '@middy/validator/transpile';
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const createAuction = async (event) => {
-  const { title } = event.body;
-  const { email } = event.requestContext.authorizer;
-  const now = new Date();
-  const endDate = new Date();
-  endDate.setHours(endDate.getHours() + 1);
-
-  const auction = {
-    id: v4(),
-    title,
-    status: 'OPEN',
-    seller: email,
-    createdAt: now.toISOString(),
-    endingAt: endDate.toISOString(),
-    highestBid: {
-      amount: 0
-    }
-  };
-
   try {
+    const { title } = event.body;
+    const { email } = event.requestContext.authorizer;
+    const now = new Date();
+    const endDate = new Date();
+    endDate.setHours(endDate.getHours() + 1);
+
+    const auction = {
+      id: v4(),
+      title,
+      status: 'OPEN',
+      seller: email,
+      createdAt: now.toISOString(),
+      endingAt: endDate.toISOString(),
+      highestBid: {
+        amount: 0
+      }
+    };
+
     await dynamoDB.put({
       // Environment variable
       TableName: process.env.AUCTIONS_TABLE_NAME,
