@@ -6,24 +6,25 @@ import validator from '@middy/validator';
 import placeBidSchema from '../lib/schemas/placeBidSchema';
 import { transpileSchema } from '@middy/validator/transpile';
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
-
 const placeBid = async (event) => {
-  const { id } = event.pathParameters;
-  const { amount } = event.body;
-  const params = {
-    TableName: process.env.AUCTIONS_TABLE_NAME,
-    Key: { id },
-    UpdateExpression: 'set highestBid.amount = :amount',
-    ExpressionAttributeValues: {
-      ':amount': amount
-    },
-    ReturnValues: 'ALL_NEW'
-  };
-
   let updatedAuction;
 
   try {
+    const dynamoDB = new AWS.DynamoDB.DocumentClient();
+    const { id } = event.pathParameters;
+    const { amount } = event.body;
+    const { email } = event.requestContext.authorizer;
+    const params = {
+      TableName: process.env.AUCTIONS_TABLE_NAME,
+      Key: { id },
+      UpdateExpression: 'set highestBid.amount = :amount, highestBid.bidder = :bidder',
+      ExpressionAttributeValues: {
+        ':amount': amount,
+        ':bidder': email
+      },
+      ReturnValues: 'ALL_NEW'
+    };
+
     // Validation
     const auction = await getAuctionById(id);
     if (!auction) {
@@ -34,6 +35,12 @@ const placeBid = async (event) => {
     }
     if (amount <= auction?.highestBid?.amount) {
       throw new createError.Forbidden(`Your bid must be higher than current amount ${auction.highestBid.amount}`);
+    }
+    if (email === auction?.highestBid?.bidder) {
+      throw new createError.Forbidden(`You are already the highest bidder`);
+    }
+    if (email === auction?.seller) {
+      throw new createError.Forbidden(`You cannot bid for your own auction`);
     }
 
     // Updation
