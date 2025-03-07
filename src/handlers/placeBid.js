@@ -7,9 +7,8 @@ import placeBidSchema from '../lib/schemas/placeBidSchema';
 import { transpileSchema } from '@middy/validator/transpile';
 
 const placeBid = async (event) => {
-  let updatedAuction;
-
   try {
+    let updatedAuction;
     const dynamoDB = new AWS.DynamoDB.DocumentClient();
     const { id } = event.pathParameters;
     const { amount } = event.body;
@@ -46,14 +45,15 @@ const placeBid = async (event) => {
     // Updation
     const result = await dynamoDB.update(params).promise();
     updatedAuction = result.Attributes;
+
+    // 200: OK
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedAuction)
+    };
   } catch (error) {
     catchBlockCode(error);
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(updatedAuction)
-  };
 };
 
 export const handler = commonMiddlewares(placeBid)

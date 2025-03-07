@@ -27,20 +27,21 @@ const createAuction = async (event) => {
       }
     };
 
+    // Updation
     await dynamoDB.put({
       // Environment variable
       TableName: process.env.AUCTIONS_TABLE_NAME,
       Item: auction
     }).promise();
+
+    // 201: Resource created
+    return {
+      statusCode: 201,
+      body: JSON.stringify({ auction })
+    };
   } catch (error) {
     catchBlockCode(error);
   }
-
-  // 201: Resource created
-  return {
-    statusCode: 201,
-    body: JSON.stringify({ auction })
-  };
 };
 
 export const handler = commonMiddlewares(createAuction)

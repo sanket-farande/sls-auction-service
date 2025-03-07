@@ -7,9 +7,8 @@ import { transpileSchema } from '@middy/validator/transpile';
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const getAuctions = async (event) => {
-  let auctions;
-
   try {
+    let auctions;
     let { status } = event.queryStringParameters;
     let params = {
       TableName: process.env.AUCTIONS_TABLE_NAME,
@@ -22,16 +21,19 @@ const getAuctions = async (event) => {
         '#status': 'status'
       }
     };
+
+    // Read
     const result = await dynamoDB.query(params).promise();
     auctions = result.Items;
+
+    // 200: OK
+    return {
+      statusCode: 200,
+      body: JSON.stringify(auctions)
+    };
   } catch (error) {
     catchBlockCode(error);
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(auctions)
-  };
 };
 
 export const handler = commonMiddlewares(getAuctions)
