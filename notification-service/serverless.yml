@@ -1,0 +1,28 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: sanketfarande2
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: notification-service
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: notification-service
+
+# Webpack plugin for bundeling
+plugins:
+  - serverless-bundle
+
+build:
+  esbuild: false
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  iam:
+    role:
+      statements:
+        - ${file(iam/SendMailIAM.yml):SendMailIAM}
+
+functions:
+  sendMail:
+    handler: src/handlers/sendMail.handler
