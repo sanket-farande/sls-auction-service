@@ -4,19 +4,24 @@ const { catchBlockCode } = require('auction-service-common');
 
 async function sendMail(event) {
     try {
+        const record = event.Records[0];
+        console.log(`Processing record`, record);
+
+        const { subject, body, recipient } = JSON.parse(record.body);
+
         const params = {
             Source: 'teknasvideos@gmail.com',
             Destination: {
-                ToAddresses: ['teknasvideos@gmail.com'],
+                ToAddresses: [recipient],
             },
             Message: {
                 Body: {
                     Text: {
-                        Data: 'Hello from AWS SES practice'
+                        Data: body
                     }
                 },
                 Subject: {
-                    Data: 'AWS SES Test Mail'
+                    Data: subject
                 }
             }
         };

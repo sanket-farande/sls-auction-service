@@ -34,7 +34,7 @@ provider:
 
 resources:
   Resources:
-  # Logical name key AuctionsTable
+  # Logical name key AuctionsTable as arn
     AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
 # Function level
