@@ -17,6 +17,7 @@ const generatePolicy = function (principalId, methodArn) {
   };
 };
 
+// JWT based auth and allowing access to the lambdas
 export const handler = async (event) => {
   try {
     // Validation

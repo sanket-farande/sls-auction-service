@@ -2,6 +2,7 @@ import { catchBlockCode } from "auction-service-common";
 import { getEndedAuctions } from "../lib/getEndedAuctions";
 import { closeAuction } from "../lib/closeAuction";
 
+// CLosing auctions exceeding 1hour of creation
 async function processAuctions(event) {
   try {
     console.log(`Processing Auctions!`);

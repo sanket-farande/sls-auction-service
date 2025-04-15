@@ -6,6 +6,7 @@ import { transpileSchema } from '@middy/validator/transpile';
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
+// Get all auctions
 const getAuctions = async (event) => {
   try {
     let auctions;

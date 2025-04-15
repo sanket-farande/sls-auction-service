@@ -10,6 +10,7 @@ export async function getAuctionById(id) {
   return auction;
 }
 
+// Get Auction based on ID
 const getAuction = async (event) => {
   try {
     let auction;
