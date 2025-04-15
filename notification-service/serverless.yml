@@ -27,6 +27,10 @@ provider:
 resources:
   Resources:
     MailQueue: ${file(resources/MailQueue.yml):MailQueue}
+  # Exporting variables to be used by other services and publishing the msg to SQS
+  Outputs:
+    MailQueueArn: ${file(resources/MailQueue.yml):Outputs.MailQueueArn}
+    MailQueueUrl: ${file(resources/MailQueue.yml):Outputs.MailQueueUrl}
 
 # Trigger based on SQS message with 1 message at a time
 functions:
@@ -41,3 +45,4 @@ custom:
   mailQueue:
     name: MailQueue-${self:provider.stage}
     arn: !GetAtt MailQueue.Arn
+    url: !Ref MailQueue
