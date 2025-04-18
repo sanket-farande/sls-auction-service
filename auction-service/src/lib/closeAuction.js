@@ -20,25 +20,39 @@ export async function closeAuction(auction) {
 
     const { title, seller, highestBid } = auction;
     const { amount, bidder } = highestBid;
+    const promises = [];
 
-    console.log(`Informing bidder ${bidder} and seller ${seller} for an auction ${JSON.stringify(auction)}`);
-
-    const notifyBidder = sqs.sendMessage({
-        QueueUrl: process.env.MAIL_QUEUE_URL,
-        MessageBody: JSON.stringify({
-            subject: 'You won an Auction!',
-            recipient: bidder,
-            body: `Whooo! you got an item ${title} for ${amount}`,
-        })
-    }).promise();
-    const notifySeller = sqs.sendMessage({
-        QueueUrl: process.env.MAIL_QUEUE_URL,
-        MessageBody: JSON.stringify({
-            subject: 'Your item has been sold!',
-            recipient: seller,
-            body: `Whooo! your item ${title} has been sold for ${amount}`,
-        })
-    }).promise();
-
-    return Promise.all([notifyBidder, notifySeller]);
+    // Inform Bidder and Seller through SQS msg consumed by notification sls
+    if (amount === 0) {
+        console.log(`Informing seller ${seller} for an auction went unsold ${JSON.stringify(auction)}`);
+        const notifySeller = sqs.sendMessage({
+            QueueUrl: process.env.MAIL_QUEUE_URL,
+            MessageBody: JSON.stringify({
+                subject: 'Your item could not be sold!',
+                recipient: seller,
+                body: `Sorry! your item ${title} could not be sold.`,
+            })
+        }).promise();
+        promises.push(notifySeller);
+    } else {
+        console.log(`Informing bidder ${bidder} and seller ${seller} for an auction ${JSON.stringify(auction)}`);
+        const notifyBidder = sqs.sendMessage({
+            QueueUrl: process.env.MAIL_QUEUE_URL,
+            MessageBody: JSON.stringify({
+                subject: 'You won an Auction!',
+                recipient: bidder,
+                body: `Whooo! you got an item ${title} for ${amount}/-`,
+            })
+        }).promise();
+        const notifySeller = sqs.sendMessage({
+            QueueUrl: process.env.MAIL_QUEUE_URL,
+            MessageBody: JSON.stringify({
+                subject: 'Your item has been sold!',
+                recipient: seller,
+                body: `Whooo! your item ${title} has been sold for ${amount}/-`,
+            })
+        }).promise();
+        promises.push(notifyBidder, notifySeller);
+    }
+    return Promise.all(promises);
 }
